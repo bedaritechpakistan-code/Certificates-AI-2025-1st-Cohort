@@ -83,24 +83,35 @@
   </footer>
 
   <script>
-    // Get certificate ID from URL
     const params = new URLSearchParams(window.location.search);
     const certId = params.get("id");
-
     const container = document.getElementById("certificate-info");
 
     if (certId) {
-      // Show the verified certificate
-      container.innerHTML = `
-        <p><strong>Name:</strong> Verified Candidate</p>
-        <p><strong>Certificate ID:</strong> ${certId}</p>
-        <div class="certificate">
-          <img src="images/${certId}.jpg" alt="Certificate ${certId}">
-        </div>
-        <h2>Bedari Tech Pakistan</h2>
-      `;
+      const imagePath = `Certificates/${certId}.jpg`;
+
+      // Create image element
+      const img = new Image();
+      img.src = imagePath;
+      img.alt = `Certificate ${certId}`;
+
+      img.onload = () => {
+        container.innerHTML = `
+          <p><strong>Name:</strong> Verified Candidate</p>
+          <p><strong>Certificate ID:</strong> ${certId}</p>
+          <div class="certificate">
+            <img src="${imagePath}" alt="Certificate ${certId}">
+          </div>
+          <h2>Bedari Tech Pakistan</h2>
+        `;
+      };
+
+      img.onerror = () => {
+        container.innerHTML = `
+          <p class="error">❌ Certificate with ID <strong>${certId}</strong> not found.</p>
+        `;
+      };
     } else {
-      // If no ID in URL
       container.innerHTML = `
         <p class="error">❌ No certificate ID provided. Please scan a valid QR code.</p>
       `;
